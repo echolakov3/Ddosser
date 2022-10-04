@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Emil Cholakov">
+
+  <title>Ddosser</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+  <style>
+    span,
+    [id^="removeBodyParamButton"],
+    [id^="removeHeaderButton"] {
+      vertical-align: top !important;
+    }
+
+    [id^="removeBodyParamButton"],
+    [id^="removeHeaderButton"] {
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    #wrapper {
+      /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#b6e026+0,abdc28+100;Green+Flat */
+      background: rgb(182, 224, 38);
+      /* Old browsers */
+      background: -moz-linear-gradient(top, rgba(182, 224, 38, 1) 0%, rgba(171, 220, 40, 1) 100%);
+      /* FF3.6-15 */
+      background: -webkit-linear-gradient(top, rgba(182, 224, 38, 1) 0%, rgba(171, 220, 40, 1) 100%);
+      /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(to bottom, rgba(182, 224, 38, 1) 0%, rgba(171, 220, 40, 1) 100%);
+      /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#b6e026', endColorstr='#abdc28', GradientType=0);
+      /* IE6-9 */
+
+      border: 2px solid black;
+      border-radius: 20px;
+
+      padding: 10px;
+      margin-top: 10px;
+      margin-bottom: 30px;
+
+      box-shadow: 5px 10px;
+    }
+
+    body {
+      background: #1E9600;
+      /* fallback for old browsers */
+      background: -webkit-linear-gradient(to right, #FF0000, #FFF200, #1E9600);
+      /* Chrome 10-25, Safari 5.1-6 */
+      background: linear-gradient(to right, #FF0000, #FFF200, #1E9600);
+      /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    #title {
+      text-align: center;
+      text-shadow: 4px 4px 2px rgba(0, 0, 0, 0.6);
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="container" id="wrapper">
+    <form action="/ddos" method="post">
+      <div class="row">
+        <div class="col">
+          <h1 id=title>Ddosser</h1>
+          <hr>
+          <span style="font-style: italic; font-size: 20px;">MultiThreaded Http(S) Pinger, Http Rest Endpoint Timeouter, Ddos Tester</span>
+          <hr>
+          <h2>Settings:</h2>
+
+          <div>
+            <span>workerThreads=</span>
+            <input type="text" name="workerThreads" value="4" class="form-control">
+          </div>
+          <br>
+          <div>
+            <span>delay=</span>
+            <input type="text" name="delay" value="3000" class="form-control">
+          </div>
+          <br>
+          <div>
+            <span>totalRequests=</span>
+            <input type="text" name="totalRequests" value="1" class="form-control">
+          </div>
+          <br>
+          <div>
+            <span>method=</span>
+            <input type="text" name="method" value="GET" class="form-control">
+          </div>
+          <br>
+          <div>
+            <span>hostname=</span>
+            <textarea name="hostname" class="form-control">jsonplaceholder.typicode.com</textarea>
+          </div>
+          <br>
+          <div>
+            <span>path=</span>
+            <textarea name="path" class="form-control">/posts/1</textarea>
+          </div>
+          <div>
+            <span>port=</span>
+            <input name="port" class="form-control">
+          </div>
+          <div>
+            <span>protocol=</span>
+            <input name="protocol" class="form-control" value="HTTPS">
+          </div>
+
+        </div>
+
+        <div class="col">
+          <h2>Body:</h2>
+
+          <div id="body"></div>
+
+          <div class="container">
+            <div class="row">
+              <div class="col">
+                <input type="text" placeholder="key" id="bodyKey" class="form-control">
+              </div>
+              <div class="col">
+                <input type="text" placeholder="value" id="bodyValue" class="form-control">
+              </div>
+            </div>
+          </div>
+
+          <button id="addBodyParamButton" style="margin-top: 5px;" class="btn btn-success">Add</button>
+
+          <hr>
+          <h2>Headers:</h2>
+
+          <div id="headers">
+          </div>
+
+          <div class="container">
+            <div class="row">
+              <div class="col">
+                <input type="text" placeholder="key" id="headerKey" class="form-control">
+              </div>
+              <div class="col">
+                <input type="text" placeholder="value" id="headerValue" class="form-control">
+              </div>
+            </div>
+          </div>
+
+          <button id="addHeaderParamButton" style="margin-top: 5px;" class="btn btn-success">Add</button>
+
+          <hr>
+          <div style="text-align: center;"><input type="submit" value="Dddos" class="btn btn-primary"></div>
+
+        </div>
+      </div>
+    </form>
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+
+  <script>
+    let bodyParamI = 0;
+    $("#addBodyParamButton").on("click", function(event) {
+      ++bodyParamI;
+
+      event.preventDefault();
+
+      $("#body").append(`<div id="bodyParam` + bodyParamI + `">
+                        <span>` + $("#bodyKey").val() + `=</span><br>
+                        <textarea class="form-control" name="body.` + $("#bodyKey").val() + `">` + $("#bodyValue").val() + `</textarea>
+                        <button type="button" id="removeBodyParamButton` + bodyParamI + `" class="btn btn-danger">Remove</button>
+                        </div>`);
+
+      $("#" + `removeBodyParamButton` + bodyParamI).on("click", function(event) {
+        $(this).parent().remove();
+      });
+
+    });
+
+    let headerParamI = 0;
+    $("#addHeaderParamButton").on("click", function(event) {
+      ++headerParamI;
+
+      event.preventDefault();
+
+      $("#headers").append(`<div id="headerParam` + headerParamI + `">
+                            <span>` + $("#headerKey").val() + `=</span><br>
+                            <textarea class="form-control" name="header.` + $("#headerKey").val() + `">` + $("#headerValue").val() + `</textarea>
+                            <button type="button" id="removeHeaderButton` + headerParamI + `" class="btn btn-danger">Remove</button>
+                            </div>`);
+
+      $("#" + `removeHeaderButton` + headerParamI).on("click", function(event) {
+        $(this).parent().remove();
+      });
+
+    });
+  </script>
+
+</body>
+
+</html>
